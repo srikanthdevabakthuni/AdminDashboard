@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tables - Flexy Admin</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:999;display:none;}
+    .sidebar-overlay.active{display:block;}
+    .table-dark { background: #2a3547; color: white; }
+    .table-dark th { background: #1e2b3c; color: #a8b8cc; }
+    .table-dark td { border-color: #3a4a5c; }
+    .table-dark tbody tr:hover { background: #354563; }
+    .table-striped tbody tr:nth-child(even) { background: var(--body-bg); }
+    .table-bordered td, .table-bordered th { border: 1px solid var(--border); }
+    .table-hover tbody tr { transition: background 0.15s; }
+    .dt-search { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .dt-info { font-size: 13px; color: var(--muted); margin-top: 12px; }
+    .dt-pagination { display: flex; gap: 4px; margin-top: 12px; justify-content: flex-end; }
+    .dt-page-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: white; cursor: pointer; font-size: 13px; font-family: var(--font); transition: var(--transition); }
+    .dt-page-btn.active, .dt-page-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+    .dt-page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .sortable { cursor: pointer; user-select: none; }
+    .sortable:hover { color: var(--primary); }
+    .sort-icon { margin-left: 4px; opacity: 0.5; font-size: 11px; }
+  </style>
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="wrapper">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><svg width="22" height="22" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="logo-text">Flexy<span>Admin</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Home</div>
+      <div class="nav-item"><a class="nav-link" href="dashboard.html"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Dashboard</span></a></div>
+      <div class="nav-section-title">Apps</div>
+      <div class="nav-item"><a class="nav-link" href="ecommerce.html"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span>Ecommerce</span></a></div>
+      <div class="nav-item"><a class="nav-link" href="user-profile.html"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>User Profile</span></a></div>
+      <div class="nav-item"><a class="nav-link" href="calendar.html"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Calendar</span></a></div>
+      <div class="nav-item"><a class="nav-link" href="kanban.html"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="5" height="13"/><rect x="10" y="3" width="5" height="8"/><rect x="17" y="3" width="5" height="18"/></svg><span>Kanban</span></a></div>
+      <div class="nav-item"><a class="nav-link" href="contact-table.html"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Contact Table</span></a></div>
+      <div class="nav-section-title">Pages</div>
+      <div class="nav-item open"><a class="nav-link active" href="tables.html"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg><span>Tables</span><svg class="nav-arrow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+        <div class="nav-submenu">
+          <div class="nav-item"><a class="nav-link" href="#basicTable"><span>Basic Tables</span></a></div>
+          <div class="nav-item"><a class="nav-link" href="#darkTable"><span>Dark Table</span></a></div>
+          <div class="nav-item"><a class="nav-link" href="#dataTable"><span>Data Tables</span></a></div>
+        </div>
+      </div>
+      <div class="nav-item"><a class="nav-link" href="charts.html"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Charts</span></a></div>
+      <div class="nav-item"><a class="nav-link" href="ui-buttons.html"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/></svg><span>UI Elements</span></a></div>
+      <div class="nav-section-title">Auth</div>
+      <div class="nav-item"><a class="nav-link" href="login.html"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span>Login</span></a></div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button id="sidebarToggle"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        <div class="topbar-search"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" placeholder="Search here..." /></div>
+      </div>
+      <div class="topbar-right">
+        <div class="dropdown"><div class="topbar-user" data-dropdown="userMenuT"><img src="https://i.pravatar.cc/80?img=5" alt="User"/><div class="user-info hide-mobile"><span class="user-name">Admin User</span><span class="user-role">Super Admin</span></div></div><div class="dropdown-menu" id="userMenuT"><a class="dropdown-item" href="user-profile.html">My Profile</a><a class="dropdown-item" href="#">Settings</a><hr class="dropdown-divider"/><a class="dropdown-item" href="login.html" style="color:var(--danger)">Logout</a></div></div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-title-box">
+        <h1 class="page-title">Bootstrap Tables</h1>
+        <div class="breadcrumb"><a href="dashboard.html">Home</a><span class="breadcrumb-sep">/</span><span>Tables</span></div>
+      </div>
+
+      <!-- Basic Table -->
+      <div id="basicTable" class="card">
+        <div class="card-header">
+          <div><div class="card-title">Basic Table</div><div class="card-subtitle">Simple example with default styling</div></div>
+          <button class="btn btn-primary btn-sm" data-modal="addRowModal">+ Add Row</button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Mark</td><td>Otto</td><td>mark@email.com</td><td>Admin</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-outline-primary btn-sm">Edit</button></td></tr>
+                <tr><td>2</td><td>Jacob</td><td>Thornton</td><td>jacob@email.com</td><td>User</td><td><span class="badge badge-warning">Pending</span></td><td><button class="btn btn-outline-primary btn-sm">Edit</button></td></tr>
+                <tr><td>3</td><td>Larry</td><td>the Bird</td><td>larry@email.com</td><td>Editor</td><td><span class="badge badge-danger">Inactive</span></td><td><button class="btn btn-outline-primary btn-sm">Edit</button></td></tr>
+                <tr><td>4</td><td>Sarah</td><td>Connor</td><td>sarah@email.com</td><td>Manager</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-outline-primary btn-sm">Edit</button></td></tr>
+                <tr><td>5</td><td>John</td><td>Doe</td><td>john@email.com</td><td>User</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-outline-primary btn-sm">Edit</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Striped Table -->
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">Striped Table</div><div class="card-subtitle">Alternating row colors</div></div></div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead><tr><th>#</th><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Elite Admin</td><td>Templates</td><td>$49</td><td>∞</td><td><span class="badge badge-success">Published</span></td></tr>
+                <tr><td>2</td><td>Real Homes WP</td><td>WordPress</td><td>$89</td><td>∞</td><td><span class="badge badge-success">Published</span></td></tr>
+                <tr><td>3</td><td>MedicalPro</td><td>WordPress</td><td>$69</td><td>∞</td><td><span class="badge badge-warning">Draft</span></td></tr>
+                <tr><td>4</td><td>Hosting Press</td><td>HTML</td><td>$29</td><td>∞</td><td><span class="badge badge-success">Published</span></td></tr>
+                <tr><td>5</td><td>MaterialPro</td><td>Bootstrap</td><td>$59</td><td>∞</td><td><span class="badge badge-danger">Unpublished</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bordered Table -->
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">Bordered Table</div></div></div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead><tr><th>Month</th><th>Revenue</th><th>Expenses</th><th>Profit</th><th>Growth</th></tr></thead>
+              <tbody>
+                <tr><td>January</td><td>$12,500</td><td>$8,200</td><td>$4,300</td><td><span class="text-success fw-600">+12%</span></td></tr>
+                <tr><td>February</td><td>$15,800</td><td>$9,100</td><td>$6,700</td><td><span class="text-success fw-600">+26%</span></td></tr>
+                <tr><td>March</td><td>$11,200</td><td>$8,900</td><td>$2,300</td><td><span class="text-danger fw-600">-14%</span></td></tr>
+                <tr><td>April</td><td>$18,400</td><td>$10,200</td><td>$8,200</td><td><span class="text-success fw-600">+56%</span></td></tr>
+                <tr><td>May</td><td>$22,100</td><td>$11,800</td><td>$10,300</td><td><span class="text-success fw-600">+26%</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dark Table -->
+      <div id="darkTable" class="card">
+        <div class="card-header"><div><div class="card-title">Dark Table</div><div class="card-subtitle">Dark themed table styling</div></div></div>
+        <div class="card-body" style="background:#2a3547;border-radius:0 0 var(--radius-lg) var(--radius-lg);">
+          <div class="table-responsive">
+            <table class="table table-dark">
+              <thead><tr><th>#</th><th>Customer</th><th>Order</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>001</td><td>Sunil Joshi</td><td>Elite Admin License</td><td>$49.00</td><td>Mar 20, 2025</td><td><span class="badge badge-success">Completed</span></td></tr>
+                <tr><td>002</td><td>Andrew McD</td><td>Real Homes Theme</td><td>$89.00</td><td>Mar 21, 2025</td><td><span class="badge badge-warning">Pending</span></td></tr>
+                <tr><td>003</td><td>Chris Jamil</td><td>MedicalPro Theme</td><td>$69.00</td><td>Mar 22, 2025</td><td><span class="badge badge-success">Completed</span></td></tr>
+                <tr><td>004</td><td>Nirav Joshi</td><td>Hosting Press</td><td>$29.00</td><td>Mar 23, 2025</td><td><span class="badge badge-danger">Failed</span></td></tr>
+                <tr><td>005</td><td>Micheal Doe</td><td>MaterialPro</td><td>$59.00</td><td>Mar 24, 2025</td><td><span class="badge badge-success">Completed</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Table (with search, sort, pagination) -->
+      <div id="dataTable" class="card">
+        <div class="card-header"><div><div class="card-title">Advanced Data Table</div><div class="card-subtitle">Search, sort, and paginate data</div></div></div>
+        <div class="card-body">
+          <div class="dt-search">
+            <div class="topbar-search" style="flex:1;max-width:300px;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" id="dtSearch" placeholder="Search table..." />
+            </div>
+            <select class="form-control form-select" id="dtEntries" style="width:auto;padding:8px 28px 8px 10px;font-size:13px;">
+              <option value="5">5 per page</option>
+              <option value="10" selected>10 per page</option>
+              <option value="25">25 per page</option>
+            </select>
+            <button class="btn btn-success btn-sm" onclick="exportCSV()">Export CSV</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover" id="mainDataTable">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="selectAll" /></th>
+                  <th class="sortable" data-col="0">Name <span class="sort-icon">↕</span></th>
+                  <th class="sortable" data-col="1">Position <span class="sort-icon">↕</span></th>
+                  <th class="sortable" data-col="2">Office <span class="sort-icon">↕</span></th>
+                  <th class="sortable" data-col="3">Age <span class="sort-icon">↕</span></th>
+                  <th class="sortable" data-col="4">Salary <span class="sort-icon">↕</span></th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dtBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex justify-between align-items-center">
+            <div class="dt-info" id="dtInfo">Showing 1-10 of 30 entries</div>
+            <div class="dt-pagination" id="dtPagination"></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+    <footer class="footer">Design and Developed by <a href="#">Flexy Admin</a> &copy; 2025 All Rights Reserved</footer>
+  </div>
+</div>
+
+<!-- Add Row Modal -->
+<div class="modal-overlay" id="addRowModal">
+  <div class="modal-box">
+    <div class="modal-header"><div class="modal-title">Add New Row</div><button class="modal-close" onclick="document.getElementById('addRowModal').classList.remove('show')">×</button></div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col col-6 col-sm-12"><div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-control" placeholder="First name" /></div></div>
+        <div class="col col-6 col-sm-12"><div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-control" placeholder="Last name" /></div></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" placeholder="Email address" /></div>
+      <div class="form-group"><label class="form-label">Role</label><select class="form-control form-select"><option>Admin</option><option>User</option><option>Editor</option><option>Manager</option></select></div>
+      <div class="form-group"><label class="form-label">Status</label><select class="form-control form-select"><option>Active</option><option>Pending</option><option>Inactive</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-light" onclick="document.getElementById('addRowModal').classList.remove('show')">Cancel</button>
+      <button class="btn btn-primary" onclick="showToast('Added!','New row added successfully.','success');document.getElementById('addRowModal').classList.remove('show')">Add Row</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+<button class="scroll-top" id="scrollTop"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
+<script src="js/main.js"></script>
+<script>
+// ===== DATA TABLE JS =====
+const dtData = [
+  ['Airi Satou','Accountant','Tokyo',33,'$162,700'],
+  ['Angelica Ramos','Chief Executive Officer','London',47,'$1,200,000'],
+  ['Ashton Cox','Junior Technical Author','San Francisco',66,'$86,000'],
+  ['Bradley Greer','Software Engineer','London',41,'$132,000'],
+  ['Brenden Wagner','Software Engineer','San Francisco',28,'$206,850'],
+  ['Brielle Williamson','Integration Specialist','New York',61,'$372,000'],
+  ['Bruno Nash','Software Engineer','London',38,'$163,500'],
+  ['Caesar Vance','Pre-Sales Support','New York',21,'$106,450'],
+  ['Cara Stevens','Sales Assistant','New York',46,'$145,600'],
+  ['Cedric Kelly','Senior Javascript Developer','Edinburgh',22,'$433,060'],
+  ['Charde Marshall','Regional Director','San Francisco',36,'$470,600'],
+  ['Colleen Hurst','Javascript Developer','San Francisco',39,'$205,500'],
+  ['Dai Rios','Personnel Lead','Edinburgh',35,'$217,500'],
+  ['Donna Snider','Customer Support','New York',27,'$112,000'],
+  ['Doris Wilder','Sales Assistant','Sydney',23,'$85,600'],
+  ['Finn Camacho','Support Engineer','San Francisco',47,'$342,000'],
+  ['Fiona Green','Chief Operating Officer','San Francisco',48,'$850,000'],
+  ['Garrett Winters','Accountant','Tokyo',63,'$170,750'],
+  ['Gavin Cortez','Team Leader','San Francisco',22,'$235,500'],
+  ['Gavin Joyce','Developer','Edinburgh',42,'$92,575'],
+  ['Gloria Little','Systems Administrator','New York',59,'$237,500'],
+  ['Haley Kennedy','Senior Marketing Designer','London',43,'$313,500'],
+  ['Herrod Chandler','Sales Assistant','San Francisco',59,'$137,500'],
+  ['Hope Fuentes','Secretary','San Francisco',41,'$109,850'],
+  ['Howard Hatfield','Office Manager','San Francisco',51,'$164,500'],
+  ['Jackson Bradshaw','Director','New York',65,'$645,750'],
+  ['Jena Gaines','Office Manager','London',30,'$90,560'],
+  ['Jenette Caldwell','Development Lead','New York',30,'$345,000'],
+  ['Jennifer Chang','Regional Director','Singapore',28,'$357,650'],
+  ['Jiang Chang','Tax Accountant','San Francisco',22,'$68,600'],
+];
+
+let currentPage = 1;
+let perPage = 10;
+let filtered = [...dtData];
+let sortCol = -1;
+let sortDir = 1;
+
+function renderTable() {
+  const start = (currentPage - 1) * perPage;
+  const rows = filtered.slice(start, start + perPage);
+  const tbody = document.getElementById('dtBody');
+  if (!tbody) return;
+  tbody.innerHTML = rows.map((r, i) => `
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td class="fw-600">${r[0]}</td>
+      <td>${r[1]}</td>
+      <td>${r[2]}</td>
+      <td>${r[3]}</td>
+      <td class="text-primary fw-600">${r[4]}</td>
+      <td>
+        <button class="btn btn-outline-primary btn-sm" style="margin-right:4px" onclick="showToast('Edit','Editing ${r[0]}','info')">Edit</button>
+        <button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger)" onclick="showToast('Deleted','${r[0]} removed','danger')">Del</button>
+      </td>
+    </tr>`).join('');
+
+  const info = document.getElementById('dtInfo');
+  if (info) info.textContent = `Showing ${start+1}–${Math.min(start+perPage, filtered.length)} of ${filtered.length} entries`;
+  renderPagination();
+}
+
+function renderPagination() {
+  const pag = document.getElementById('dtPagination');
+  if (!pag) return;
+  const total = Math.ceil(filtered.length / perPage);
+  let html = `<button class="dt-page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  for (let i = 1; i <= total; i++) {
+    html += `<button class="dt-page-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  html += `<button class="dt-page-btn" onclick="goPage(${currentPage+1})" ${currentPage===total?'disabled':''}>›</button>`;
+  pag.innerHTML = html;
+}
+
+function goPage(p) {
+  const total = Math.ceil(filtered.length / perPage);
+  if (p < 1 || p > total) return;
+  currentPage = p;
+  renderTable();
+}
+
+const dtSearch = document.getElementById('dtSearch');
+if (dtSearch) {
+  dtSearch.addEventListener('input', () => {
+    const q = dtSearch.value.toLowerCase();
+    filtered = dtData.filter(r => r.some(v => String(v).toLowerCase().includes(q)));
+    currentPage = 1;
+    renderTable();
+  });
+}
+
+const dtEntries = document.getElementById('dtEntries');
+if (dtEntries) {
+  dtEntries.addEventListener('change', () => { perPage = parseInt(dtEntries.value); currentPage = 1; renderTable(); });
+}
+
+document.querySelectorAll('.sortable').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = parseInt(th.dataset.col);
+    if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = 1; }
+    filtered.sort((a, b) => {
+      const av = isNaN(a[col]) ? a[col] : parseFloat(a[col].toString().replace(/[^0-9.]/g,''));
+      const bv = isNaN(b[col]) ? b[col] : parseFloat(b[col].toString().replace(/[^0-9.]/g,''));
+      return av < bv ? -sortDir : av > bv ? sortDir : 0;
+    });
+    document.querySelectorAll('.sort-icon').forEach(s => s.textContent = '↕');
+    th.querySelector('.sort-icon').textContent = sortDir === 1 ? '↑' : '↓';
+    renderTable();
+  });
+});
+
+const selectAll = document.getElementById('selectAll');
+if (selectAll) {
+  selectAll.addEventListener('change', () => {
+    document.querySelectorAll('#dtBody input[type=checkbox]').forEach(cb => cb.checked = selectAll.checked);
+  });
+}
+
+function exportCSV() {
+  const headers = ['Name','Position','Office','Age','Salary'];
+  const rows = filtered.map(r => r.slice(0,5).map(v => `"${v}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv,' + encodeURIComponent(csv);
+  a.download = 'data-export.csv';
+  a.click();
+  showToast('Exported!','CSV file downloaded.','success');
+}
+
+document.addEventListener('DOMContentLoaded', renderTable);
+</script>
+</body>
+</html>
